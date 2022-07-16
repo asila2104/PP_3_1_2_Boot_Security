@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+        #zatemnenie {
+            background: rgba(102, 102, 102, 0.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        #okno {
+            width: 300px;
+            height: 220px;
+            text-align: center;
+            padding: 15px;
+            border: 1px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            background: #fff;
+        }
+
+        #zatemnenie:target {
+            display: block;
+        }
+
+        div.zatemnenie2 {
+            background: rgba(102, 102, 102, 0.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        #okno2 {
+            width: 300px;
+            height: 220px;
+            text-align: center;
+            padding: 15px;
+            border: 1px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            background: #fff;
+        }
+
+        div.zatemnenie2:target {
+            display: block;
+        }
+
+        .close {
+            display: inline-block;
+            border: 1px black;
+            padding: 0 12px;
+            margin: 10px;
+            color: black;
+            text-decoration: none;
+            font-size: 14pt;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            background: #e6e6ff;
+        }
+    </style>
+</head>
+<body>
+<div>
+
+
+    <table th:border="1" th:cellpadding="2" style="float: left">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}" id="userId"></td>
+            <td th:text="${user.getUsername()}"></td>
+            <td th:text="${user.getPassword()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table style="padding-top: 30px">
+        <tr th:each="user : ${users}">
+            <td>
+                <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
+                    <button style="left:20px;" type="submit" value="Delete">Delete</button>
+                </form>
+            </td>
+            <td>
+                <a th:href="@{'#z' + ${user.getId()}}">
+                    <button style="left:20px;" type="button">Edit</button>
+                </a>
+            </td>
+
+            <div class="zatemnenie2" th:id = "'z' + ${user.getId()}">
+                <div id="okno2">
+                    User<br>
+                    <form th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}" th:method="PATCH">
+                        <p><label></label></p>
+                        <p><label></label><input type="text" th:placeholder="${user.getUsername()}"
+                                                 name="name"></p>
+                        <p><label></label><input type="text" th:placeholder="${user.getUsername()}"
+                                                 name="age"></p>
+                        </p>
+                        <p>
+                            <button type="submit">Update</button>
+                        </p>
+                    </form>
+                    <a href="#" class="close">close</a>
+                </div>
+            </div>
+        </tr>
+
+    </table>
+
+    <div id="zatemnenie">
+        <div id="okno">
+            User<br>
+            <form data-th-action="@{/admin}" data-th-object="${user}" method="post">
+                <p><label for="username"></label><input type="text" placeholder="Login" id="username" name="username"></p>
+                <p><label for="password"></label><input type="text" placeholder="Password" id="password" name="password"></p>
+                </p>
+                <p>
+                    <button type="submit">Send</button>
+                </p>
+            </form>
+            <a href="#" class="close">close</a>
+        </div>
+    </div>
+
+
+    <a href="#zatemnenie">Add</a>
+    <button type="button" th:onclick="|window.location.href='/user'|">Log in</button>
+    <button type="button" th:onclick="|window.location.href='/logout'|">Log out</button>
+</div>
+</body>
+</html>
