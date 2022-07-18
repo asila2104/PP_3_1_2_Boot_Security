@@ -45,7 +45,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public void updateUser(int id, User user) {
         User user1 = userRepository.findById(id).get();
-        user1.setUsername(user.getUsername());
+        //user1.setUsername(user.getUsername());
         user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user1);
     }
@@ -62,7 +62,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByEmail(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
