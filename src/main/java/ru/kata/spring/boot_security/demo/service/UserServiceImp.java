@@ -46,7 +46,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public void updateUser(int id, User user) {
         User user1 = userRepository.findById(id).get();
         user1.setUsername(user.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user1);
     }
 
