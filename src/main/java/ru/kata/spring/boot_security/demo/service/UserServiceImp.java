@@ -5,64 +5,52 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.dao.RoleRepository;
-import ru.kata.spring.boot_security.demo.dao.UserRepository;
-import ru.kata.spring.boot_security.demo.models.Role;
+import ru.kata.spring.boot_security.demo.dao.UserDAO;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserServiceImp implements UserService, UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserDAO userDao;
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImp(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+    public UserServiceImp(UserDAO userDao, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userDao = userDao;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public void addUser(User user) {
-        Role newRole = roleRepository.findByRole("ROLE_USER");
-
-        user.setRoles(Collections.singleton(newRole));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userDao.addUser(user);
     }
 
     @Override
     public void removeUser(int id) {
-        userRepository.deleteById(id);
+        userDao.removeUser(id);
     }
 
     @Override
     public void updateUser(int id, User user) {
-        User user1 = userRepository.findById(id).get();
-        //user1.setUsername(user.getUsername());
-        user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user1);
+        userDao.updateUser(id, user);
     }
 
     @Override
     public User findUserById(int id) {
-        return userRepository.findById(id).get();
+        return userDao.findUserById(id);
     }
 
     @Override
     public List<User> showUsers() {
-        return userRepository.findAll();
+        return userDao.showUsers();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
+        User user = userDao.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

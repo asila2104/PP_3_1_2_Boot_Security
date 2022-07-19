@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,33 +17,29 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/admin/users")
-    public String showUsers(Model model) {
+
+    @GetMapping()
+    public String showAdmin(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
         model.addAttribute("users", userService.showUsers());
-
-        return "users";
-    }
-
-    @GetMapping("/admin")
-    public String showAdmin() {
         return "admin";
     }
 
-    @PostMapping("/admin")
+    @PostMapping()
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         userService.removeUser(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
-    @PatchMapping("/admin/{id}")
+    @PatchMapping("/{id}")
     public String editUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
         userService.updateUser(id, user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }
