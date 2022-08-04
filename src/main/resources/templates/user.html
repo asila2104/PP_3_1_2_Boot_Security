@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -14,11 +13,9 @@
     <div class="container-fluid my-1">
         <div class="navbar-nav">
             <form class="form-inline">
-                <strong><span class="navbar-text text-white font-weight-bold"
-                              th:text="${user.getEmail()}"></span></strong>
+                <strong><span id="email-header" class="navbar-text text-white font-weight-bold"></span></strong>
                 <span class="navbar-text text-white"> with roles: </span>
-                <span class="navbar-text text-white"><a th:each="role: ${user.getRoles()}"
-                                                        th:text="${role.getRole().replaceFirst('ROLE_', '') + ' '}"></a></span>
+                <span class="navbar-text text-white"><a id = "roles-header"></a></span>
             </form>
         </div>
         <div>
@@ -58,13 +55,12 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <th scope="row" th:text="${user.getId()}"></th>
-                            <td th:text="${user.getFirstName()}"></td>
-                            <td th:text="${user.getLastName()}"></td>
-                            <td th:text="${user.getAge()}"></td>
-                            <td th:text="${user.getEmail()}"></td>
-                            <td th:each="role: ${user.getRoles()}"
-                                th:text="${role.getRole().replaceFirst('ROLE_', '') + ' '}"></td>
+                            <th scope="row" id="id"></th>
+                            <td id="firstName"></td>
+                            <td id="lastName"></td>
+                            <td id="age"></td>
+                            <td id="email"></td>
+                            <td id="roles" style="white-space: pre-line"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -74,6 +70,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="user.js"></script>
 </body>
 </html>

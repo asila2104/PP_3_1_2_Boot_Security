@@ -5,7 +5,6 @@ import ru.kata.spring.boot_security.demo.models.Role;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.Set;
 
 @Component
 @Transactional

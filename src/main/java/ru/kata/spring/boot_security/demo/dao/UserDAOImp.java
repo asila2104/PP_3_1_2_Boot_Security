@@ -8,7 +8,6 @@ import ru.kata.spring.boot_security.demo.models.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class UserDAOImp implements UserDAO {
 
     @Override
     public void addUser(User user) {
-        user.setRoles(updateRoles(user, new HashSet<>()));
+        user.setRoles(updateRoles(user));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         entityManager.persist(user);
     }
@@ -53,15 +52,20 @@ public class UserDAOImp implements UserDAO {
 
     @Override
     public void updateUser(int id, User user) {
+
         User user1 = findUserById(id);
         user1.setId(id);
         user1.setLastName(user.getLastName());
         user1.setEmail(user.getEmail());
         user1.setFirstName(user.getFirstName());
 
-        user1.setRoles(updateRoles(user, user1.getRoles()));
+        if (user.getRoles() != null) {
+            user1.setRoles(updateRoles(user));
+        }
         user1.setAge(user.getAge());
-        user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        if (user.getPassword() != null) {
+            user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
         entityManager.persist(user1);
     }
 
@@ -70,8 +74,8 @@ public class UserDAOImp implements UserDAO {
         return entityManager.find(User.class, id);
     }
 
-    public Set<Role> updateRoles(User user, Set<Role> oldSet) {
-        Set<Role> set1 = new HashSet<>(oldSet);
+    public Set<Role> updateRoles(User user) {
+        Set<Role> set1 = new HashSet<>();
 
         for (Role role : user.getRoles()) {
             Role newRole = roleDao.findByRole(role.getRole());
