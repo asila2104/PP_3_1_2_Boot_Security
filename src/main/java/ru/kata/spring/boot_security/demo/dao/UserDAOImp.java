@@ -7,13 +7,11 @@ import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Component
-@Transactional
 public class UserDAOImp implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;

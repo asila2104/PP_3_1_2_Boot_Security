@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 @Component
-@Transactional
 public class RoleDaoImp implements RoleDao {
 
     private final EntityManager entityManager;
